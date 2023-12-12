@@ -189,7 +189,6 @@ gen_headers_out_arm64 = [
     "linux/dm-ioctl.h",
     "linux/dm-log-userspace.h",
     "linux/dma-buf.h",
-    "linux/dn.h",
     "linux/dqblk_xfs.h",
     "linux/edd.h",
     "linux/efs_fs_sb.h",
@@ -220,6 +219,7 @@ gen_headers_out_arm64 = [
     "linux/fs.h",
     "linux/fscrypt.h",
     "linux/fsl_hypervisor.h",
+    "linux/f2fs.h",
     "linux/fsmap.h",
     "linux/fsverity.h",
     "linux/fuse.h",
@@ -404,7 +404,6 @@ gen_headers_out_arm64 = [
     "linux/netfilter.h",
     "linux/netfilter_arp.h",
     "linux/netfilter_bridge.h",
-    "linux/netfilter_decnet.h",
     "linux/netfilter_ipv4.h",
     "linux/netfilter_ipv6.h",
     "linux/netlink.h",
@@ -990,7 +989,10 @@ genrule {
 
 genrule {
     name: "qti_generate_kernel_headers_arm64",
-    tools: ["headers_install.sh"],
+    tools: [
+        "headers_install.sh",
+        "unifdef",
+    ],
     tool_files: [
         "kernel_headers.py",
     ],
@@ -1011,6 +1013,7 @@ genrule {
         "--new_gen_headers_bp $(location :qti_generate_gen_headers_arm64) " +
         "--version_makefile $(location Makefile) " +
         "--headers_install $(location headers_install.sh) " +
+        "--unifdef $(location unifdef) " +
         "--include_uapi $(locations include/uapi/**/*.h)",
     out: ["linux/version.h"] + gen_headers_out_arm64,
 }

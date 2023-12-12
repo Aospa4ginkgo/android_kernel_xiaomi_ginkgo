@@ -14,6 +14,7 @@ targets := $(obj-vdso-s) $(obj-vdso-c) vdso.so vdso.so.dbg
 obj-vdso-s := $(addprefix $(obj)/, $(obj-vdso-s))
 obj-vdso-c := $(addprefix $(obj)/, $(obj-vdso-c))
 obj-vdso   := $(obj-vdso-c) $(obj-vdso-s)
+ccflags-y += $(call cc-option, -fno-whole-program)
 
 ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1  --hash-style=sysv \
 		--build-id $(call ld-option,-n) -T
@@ -28,6 +29,7 @@ ifneq ($(cc-name),clang)
 CFLAGS_vgettimeofday.o += -mcmodel=tiny
 else
 ccflags-y += $(DISABLE_LTO)
+ccflags-y += $(call cc-option, -fno-whole-program)
 endif
 
 CFLAGS_REMOVE_vgettimeofday.o += $(CC_FLAGS_SCS)
